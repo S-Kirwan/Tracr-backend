@@ -20,3 +20,5 @@ const usersData = [
 		name: "Leonardo Da Vinci",
 	},
 ];
+
+export default usersData;
