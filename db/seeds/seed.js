@@ -1,0 +1,91 @@
+import db from "../connection.js";
+import format from "pg-format";
+
+async function seed({ expeditionsData, usersData, shapesData }) {
+	await db.query(`DROP TABLE IF EXISTS expeditions;`);
+	await db.query(`DROP TABLE IF EXISTS users;`);
+	await db.query(`DROP TABLE IF EXISTS shapes;`);
+
+	await db.query(
+		`
+            CREATE TABLE shapes (
+                shape_id        SERIAL PRIMARY KEY,
+                svg_path        VARCHAR(1000),
+                name            VARCHAR(100)
+            )
+        `,
+	);
+
+	await db.query(
+		`
+            CREATE TABLE users (
+                user_id     SERIAL PRIMARY KEY,
+                username    VARCHAR(25),
+                name        VARCHAR(50),
+                password    VARCHAR(25)
+            )
+        `,
+	);
+
+	await db.query(
+		`
+            CREATE TABLE expeditions (
+                expedition_id       SERIAL PRIMARY KEY,
+                user_id             INT REFERENCES users(user_id) NOT NULL,
+                shape_id            INT REFERENCES shapes(shape_id),
+                coordinates         GEOMETRY(LINESTRING, 4326),
+                duration_seconds    INTERVAL SECOND,
+                accuracy            SMALLINT CHECK (accuracy >= 0 AND accuracy <= 100),
+                timestamp           TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        `,
+	);
+
+	const shapesValues = shapesData.map((shape) => {
+		return [shape.svg_path, shape.name];
+	});
+
+	const insertShapesQuery = format(
+		`INSERT INTO shapes (svg_path, name) VALUES %L`,
+		shapesValues,
+	);
+
+	await db.query(insertShapesQuery);
+
+	const usersValues = usersData.map((user) => {
+		return [user.username, user.name, user.password];
+	});
+
+	const insertUsersQuery = format(
+		`INSERT INTO users (username, name, password) VALUES %L`,
+		usersValues,
+	);
+
+	await db.query(insertUsersQuery);
+
+	const expeditionsValues = expeditionsData.map((expedition) => {
+		return [
+			expedition.user_id,
+			expedition.shape_id,
+			expedition.coordinates,
+			expedition.duration,
+			expedition.accuracy,
+			expedition.timestamp.toISOString(),
+		];
+	});
+
+	const formattedExpeditionsValues = expeditionsValues
+		.map((row) => {
+			return format(
+				`(%L, %L, ST_GeomFromText(%L, 4326), %L, %L, %L)`,
+				...row,
+			);
+		})
+		.join(", ");
+
+	const insertExpeditionsQuery = `INSERT INTO expeditions (user_id, shape_id, coordinates, duration_seconds, accuracy, timestamp) values ${formattedExpeditionsValues}`;
+
+	await db.query(insertExpeditionsQuery);
+}
+
+export default seed;
