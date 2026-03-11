@@ -1,0 +1,55 @@
+import db from "../db/connection.js";
+
+async function fetchAllShapes() {
+	const shapes = await db.query(
+		`SELECT * FROM shapes;
+        `,
+	);
+
+	return shapes.rows;
+}
+
+async function fetchUnusedDailyShapes() {
+	const unusedDailyShapes = await db.query(
+		`SELECT * FROM shapes
+            WHERE last_daily is null;
+        `,
+	);
+
+	if (unusedDailyShapes.rows.length === 0) {
+		return null;
+	}
+	return unusedDailyShapes.rows;
+}
+
+// shapes are only available when they haven't been picked for 50 days
+async function fetchAvailableDailyShapes() {
+	const minimumUnusedDays = 50;
+	const availableDailyShapes = await db.query(
+		`SELECT * FROM shapes
+            WHERE (CURRENT_DATE - last_daily > ${minimumUnusedDays});
+        `,
+	);
+
+	if (availableDailyShapes.rows.length === 0) {
+		return null;
+	}
+	return availableDailyShapes.rows;
+}
+
+async function updateShapeLastDaily(shape_id) {
+	await db.query(
+		`UPDATE shapes
+            SET last_daily = CURRENT_DATE
+            WHERE shape_id = ${shape_id};
+        `,
+	);
+}
+const model = {
+	fetchAllShapes,
+	fetchUnusedDailyShapes,
+	fetchAvailableDailyShapes,
+	updateShapeLastDaily,
+};
+
+export default model;
