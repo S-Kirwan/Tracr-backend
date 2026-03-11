@@ -1,5 +1,5 @@
-import runsData from "./runs.js";
+import expeditionsData from "./expeditions.js";
 import shapesData from "./shapes.js";
 import usersData from "./users.js";
 
-export { runsData, shapesData, usersData };
+export default { expeditionsData, shapesData, usersData };
