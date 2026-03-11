@@ -17,6 +17,7 @@ const shapesData = [
 	{
 		name: "four arrows",
 		svg_path: "public/assets/shapes/four_arrows.svg",
+		last_daily: "2026-03-11",
 	},
 ];
 
