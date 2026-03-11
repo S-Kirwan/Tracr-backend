@@ -9,6 +9,19 @@ async function fetchAllShapes() {
 	return shapes.rows;
 }
 
+async function fetchDailyShape() {
+	const dailyShape = await db.query(
+		`SELECT * FROM shapes
+			WHERE last_daily = CURRENT_DATE;
+		`,
+	);
+
+	if (dailyShape.rows.length === 0) {
+		return null;
+	}
+	return dailyShape.rows[0];
+}
+
 async function fetchUnusedDailyShapes() {
 	const unusedDailyShapes = await db.query(
 		`SELECT * FROM shapes
@@ -47,6 +60,7 @@ async function updateShapeLastDaily(shape_id) {
 }
 const model = {
 	fetchAllShapes,
+	fetchDailyShape,
 	fetchUnusedDailyShapes,
 	fetchAvailableDailyShapes,
 	updateShapeLastDaily,

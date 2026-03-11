@@ -27,7 +27,7 @@ describe("/api/shapes/daily", () => {
 			expect(typeof dailyShape.name).toBe("string");
 			expect(typeof dailyShape.last_daily).toBe("string");
 		});
-		test("database last_daily is updated to the current date", async () => {
+		test("Database last_daily is updated to the current date", async () => {
 			const { body } = await request(app)
 				.get("/api/shapes/daily")
 				.expect(200);
@@ -44,6 +44,27 @@ describe("/api/shapes/daily", () => {
 			expect(dbDailyShape.rows[0].last_daily.toJSON().slice(0, 10)).toBe(
 				new Date().toJSON().slice(0, 10),
 			);
+		});
+		test("Returns same shape for all requests on one day", async () => {
+			const { body } = await request(app)
+				.get("/api/shapes/daily")
+				.expect(200);
+
+			const {
+				dailyShape: { shape_id: setShape_id },
+			} = body;
+
+			for (let i = 0; i < 50; i++) {
+				const { body } = await request(app)
+					.get("/api/shapes/daily")
+					.expect(200);
+
+				const {
+					dailyShape: { shape_id },
+				} = body;
+
+				expect(shape_id).toBe(setShape_id);
+			}
 		});
 	});
 });

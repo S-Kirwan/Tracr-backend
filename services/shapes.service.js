@@ -1,6 +1,11 @@
 import { shapesModel } from "../models/index.js";
 
 async function retrieveDailyShape() {
+	const dailyShape = await shapesModel.fetchDailyShape();
+	if (dailyShape !== null) {
+		return dailyShape;
+	}
+
 	const unusedDailyShapes = await shapesModel.fetchUnusedDailyShapes();
 	if (unusedDailyShapes !== null) {
 		const randomIndex = Math.floor(
