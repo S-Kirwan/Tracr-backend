@@ -14,7 +14,6 @@ export default [
         ...globals.node,
       },
     },
-    
     rules: {
       "n/no-process-exit": "error",
     },
