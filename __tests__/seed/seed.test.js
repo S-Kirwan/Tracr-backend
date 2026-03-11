@@ -74,6 +74,36 @@ describe("shapes table", () => {
 			expect(column.character_maximum_length).toBe(100);
 		});
 	});
+	describe("last_daily", () => {
+		test("last_daily is date type", async () => {
+			const {
+				rows: [column],
+			} = await db.query(
+				`SELECT column_name, data_type
+                    FROM information_schema.columns
+                    WHERE table_name = 'shapes'
+                    AND column_name = 'last_daily';
+                `,
+			);
+
+			expect(column.column_name).toBe("last_daily");
+			expect(column.data_type).toBe("date");
+		});
+		test("last_daily defaults to NULL", async () => {
+			const {
+				rows: [column],
+			} = await db.query(
+				`SELECT column_name, column_default
+                    FROM information_schema.columns
+                    WHERE table_name = 'shapes'
+                    AND column_name = 'last_daily';
+                `,
+			);
+
+            expect(column.column_name).toBe("last_daily");
+            expect(column.column_default).toBe(null);
+		});
+	});
 });
 
 describe("users table", () => {

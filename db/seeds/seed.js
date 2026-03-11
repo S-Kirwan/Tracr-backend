@@ -11,7 +11,8 @@ async function seed({ expeditionsData, usersData, shapesData }) {
             CREATE TABLE shapes (
                 shape_id        SERIAL PRIMARY KEY,
                 svg_path        VARCHAR(1000),
-                name            VARCHAR(100)
+                name            VARCHAR(100),
+				last_daily		DATE DEFAULT NULL
             )
         `,
 	);
@@ -42,11 +43,11 @@ async function seed({ expeditionsData, usersData, shapesData }) {
 	);
 
 	const shapesValues = shapesData.map((shape) => {
-		return [shape.svg_path, shape.name];
+		return [shape.svg_path, shape.name, shape.last_daily];
 	});
 
 	const insertShapesQuery = format(
-		`INSERT INTO shapes (svg_path, name) VALUES %L`,
+		`INSERT INTO shapes (svg_path, name, last_daily) VALUES %L`,
 		shapesValues,
 	);
 
