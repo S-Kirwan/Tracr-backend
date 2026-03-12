@@ -14,6 +14,25 @@ async function findUserByUsername(username) {
 	return user.rows[0];
 }
 
-const model = { findUserByUsername };
+async function isUsernameUnique(username) {
+	if ((await findUserByUsername(username)) === null) {
+		return true;
+	}
+	return false;
+}
+
+async function insertNewUser(username, password, name) {
+	const insertedUser = await db.query(
+		`INSERT INTO users (username, password, name)
+			VALUES ($1, $2, $3)
+			RETURNING username, name;
+		`,
+		[username, password, name],
+	);
+
+	return insertedUser.rows[0];
+}
+
+const model = { findUserByUsername, isUsernameUnique, insertNewUser };
 
 export default model;

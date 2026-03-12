@@ -1,3 +1,4 @@
-import loginUserSchema from "./post-users.js";
+import loginUserSchema from "./login-users.js";
+import signupUserSchema from "./signup-users.js";
 
-export { loginUserSchema };
+export { loginUserSchema, signupUserSchema };

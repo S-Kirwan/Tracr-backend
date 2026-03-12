@@ -14,5 +14,21 @@ async function loginUser(username, password) {
 	}
 }
 
-const service = { loginUser };
+async function signUpUser(requestBody) {
+	const { name, username, password } = requestBody;
+
+	if ((await usersModel.isUsernameUnique(username)) === false) {
+		return null;
+	}
+
+	const insertedUser = await usersModel.insertNewUser(
+		username,
+		password,
+		name,
+	);
+
+	return insertedUser;
+}
+
+const service = { loginUser, signUpUser };
 export default service;

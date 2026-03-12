@@ -1,7 +1,7 @@
 import CustomError from "./custom-error.js";
 
 class InvalidMethodError extends CustomError {
-	constructor(msg = "Invalid Method") {
+	constructor(msg = "invalid method") {
 		super(msg, 405);
 	}
 }
