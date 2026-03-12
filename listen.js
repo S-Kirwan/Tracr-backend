@@ -1,7 +1,8 @@
 import app from "./app.js";
 
-const { PORT = 9090 } = process.env;
+const portNumber = 9090;
+const { PORT = portNumber } = process.env;
 
 app.listen(PORT, () => {
-	console.log("Server listening on Port 9090 :)!");
+	console.log(`Tracr server listening on port ${portNumber}`);
 });
