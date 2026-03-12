@@ -1,3 +1,4 @@
+import { BadRequestError } from "../errors/index.js";
 import { usersModel } from "../models/index.js";
 
 async function loginUser(username, password) {
@@ -16,6 +17,10 @@ async function loginUser(username, password) {
 
 async function signUpUser(requestBody) {
 	const { name, username, password } = requestBody;
+
+	if (username.length > 25 || password.length > 25 || name.length > 50) {
+		throw new BadRequestError("Invalid user data");
+	}
 
 	if ((await usersModel.isUsernameUnique(username)) === false) {
 		return null;

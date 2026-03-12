@@ -19,14 +19,18 @@ async function controlUserLogin(request, response, next) {
 async function controlUserSignup(request, response, next) {
 	const { body } = request;
 
-	const signedUpUser = await usersService.signUpUser(body);
+	try {
+		const signedUpUser = await usersService.signUpUser(body);
 
-	if (signedUpUser === null) {
-		next(new ConflictError("Username already exists"));
-		return;
+		if (signedUpUser === null) {
+			next(new ConflictError("Username already exists"));
+			return;
+		}
+
+		response.status(200).send({ signedUpUser });
+	} catch (error) {
+		next(error);
 	}
-
-	response.status(200).send({ signedUpUser });
 }
 
 const controller = {
