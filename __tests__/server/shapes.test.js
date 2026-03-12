@@ -67,4 +67,15 @@ describe("/api/shapes/daily", () => {
 			}
 		});
 	});
+	describe("Invalid methods", () => {
+		test("Invalid methods return 405 & err msg", async () => {
+			const { body } = await request(app)
+				.post("/api/shapes/daily")
+				.expect(405);
+
+			const { error } = body;
+
+			expect(error).toBe("POST invalid method on /api/shapes/daily");
+		});
+	});
 });
