@@ -94,6 +94,7 @@ describe("/api/users/signup", () => {
 
 			expect(user.username).toBe("magdalenaCarmen");
 			expect(user.name).toBe("Frida Kahlo");
+			expect(user.password).toBe(undefined);
 		});
 		test("Returns 409 conflict error when username already exists", async () => {
 			const signupRequest = {
@@ -110,6 +111,56 @@ describe("/api/users/signup", () => {
 			const { error } = body;
 
 			expect(error).toBe("Username already exists");
+		});
+		describe("Signup data invalid for database (too many characters)", () => {
+			test("Username characters > 25", async () => {
+				const signupRequest = {
+					username: "morningmilermilermilermilermilermiler",
+					name: "Vincent",
+					password: "exercise",
+				};
+
+				const { body } = await request(app)
+					.post("/api/users/signup")
+					.send(signupRequest)
+					.expect(400);
+
+				const { error } = body;
+
+				expect(error).toBe("Invalid user data");
+			});
+			test("Password characters > 25", async () => {
+				const signupRequest = {
+					username: "HotPotato",
+					name: "Vincent",
+					password: "exerciseexerciseexerciseexerciseexercise",
+				};
+
+				const { body } = await request(app)
+					.post("/api/users/signup")
+					.send(signupRequest)
+					.expect(400);
+
+				const { error } = body;
+
+				expect(error).toBe("Invalid user data");
+			});
+			test("Name characters > 50", async () => {
+				const signupRequest = {
+					username: "NuggetsOnAStick",
+					name: "VincentVincentVincentVincentVincentVincentVincentVincentVincentVincentVincentVincent",
+					password: "exercise",
+				};
+
+				const { body } = await request(app)
+					.post("/api/users/signup")
+					.send(signupRequest)
+					.expect(400);
+
+				const { error } = body;
+
+				expect(error).toBe("Invalid user data");
+			});
 		});
 	});
 	describe("Invalid methods", () => {
