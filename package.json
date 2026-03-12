@@ -2,7 +2,7 @@
   "name": "tracr-backend",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "listen.js",
   "scripts": {
     "prepare": "husky",
     "test": "node --experimental-vm-modules ./node_modules/.bin/jest",
