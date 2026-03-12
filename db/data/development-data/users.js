@@ -19,6 +19,11 @@ const usersData = [
 		password: "TMNT_rocks",
 		name: "Leonardo Da Vinci",
 	},
+	{
+		username: "user1",
+		password: "123",
+		name: "Test",
+	},
 ];
 
 export default usersData;

@@ -1,7 +1,7 @@
 import CustomError from "./custom-error.js";
 
 class BadRequestError extends CustomError {
-	constructor(msg = "Bad Request") {
+	constructor(msg = "bad request") {
 		super(msg, 400);
 	}
 }
