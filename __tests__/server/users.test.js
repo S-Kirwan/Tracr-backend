@@ -30,6 +30,7 @@ describe("/api/users/login", () => {
 
 			expect(user.username).toBe("pacePusher");
 			expect(user.name).toBe("James Okafor");
+			expect(typeof user.user_id).toBe("number");
 			expect(user.password).toBe(undefined);
 		});
 		test("Returns 401 unauthorised with invalid username", async () => {
@@ -83,6 +84,7 @@ describe("/api/users/signup", () => {
 				username: "magdalenaCarmen",
 				name: "Frida Kahlo",
 				password: "theWoundedTable22",
+				email: "muffin@gmail.com",
 			};
 
 			const { body } = await request(app)
@@ -94,6 +96,7 @@ describe("/api/users/signup", () => {
 
 			expect(user.username).toBe("magdalenaCarmen");
 			expect(user.name).toBe("Frida Kahlo");
+			expect(typeof user.user_id).toBe("number");
 			expect(user.password).toBe(undefined);
 		});
 		test("Returns 409 conflict error when username already exists", async () => {
@@ -101,6 +104,7 @@ describe("/api/users/signup", () => {
 				username: "morningmiler",
 				name: "Vincent",
 				password: "exercise",
+				email: "earlyriser@gmail.com",
 			};
 
 			const { body } = await request(app)
@@ -112,12 +116,30 @@ describe("/api/users/signup", () => {
 
 			expect(error).toBe("Username already exists");
 		});
+		test("Returns 409 conflict error when email already exists", async () => {
+			const signupRequest = {
+				username: "run",
+				name: "Vincent",
+				password: "exercise",
+				email: "bigfoot@gmail.com",
+			};
+
+			const { body } = await request(app)
+				.post("/api/users/signup")
+				.send(signupRequest)
+				.expect(409);
+
+			const { error } = body;
+
+			expect(error).toBe("Email already exists");
+		});
 		describe("Signup data invalid for database (too many characters)", () => {
 			test("Username characters > 25", async () => {
 				const signupRequest = {
 					username: "morningmilermilermilermilermilermiler",
 					name: "Vincent",
 					password: "exercise",
+					email: "earlyriser@gmail.com",
 				};
 
 				const { body } = await request(app)
@@ -134,6 +156,7 @@ describe("/api/users/signup", () => {
 					username: "HotPotato",
 					name: "Vincent",
 					password: "exerciseexerciseexerciseexerciseexercise",
+					email: "earlyriser@gmail.com",
 				};
 
 				const { body } = await request(app)
@@ -150,6 +173,7 @@ describe("/api/users/signup", () => {
 					username: "NuggetsOnAStick",
 					name: "VincentVincentVincentVincentVincentVincentVincentVincentVincentVincentVincentVincent",
 					password: "exercise",
+					email: "chickennugget@gmail.com",
 				};
 
 				const { body } = await request(app)

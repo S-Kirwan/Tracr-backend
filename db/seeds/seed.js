@@ -21,6 +21,7 @@ async function seed({ expeditionsData, usersData, shapesData }) {
 		`
             CREATE TABLE users (
                 user_id     SERIAL PRIMARY KEY,
+				email		VARCHAR(255),
                 username    VARCHAR(25),
                 name        VARCHAR(50),
                 password    VARCHAR(25)
@@ -54,11 +55,11 @@ async function seed({ expeditionsData, usersData, shapesData }) {
 	await db.query(insertShapesQuery);
 
 	const usersValues = usersData.map((user) => {
-		return [user.username, user.name, user.password];
+		return [user.username, user.name, user.password, user.email];
 	});
 
 	const insertUsersQuery = format(
-		`INSERT INTO users (username, name, password) VALUES %L`,
+		`INSERT INTO users (username, name, password, email) VALUES %L`,
 		usersValues,
 	);
 

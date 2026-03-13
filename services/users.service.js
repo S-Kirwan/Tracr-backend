@@ -1,4 +1,4 @@
-import { BadRequestError } from "../errors/index.js";
+import { BadRequestError, ConflictError } from "../errors/index.js";
 import { usersModel } from "../models/index.js";
 
 async function loginUser(username, password) {
@@ -9,27 +9,41 @@ async function loginUser(username, password) {
 	}
 
 	if (password === user.password) {
-		return { username: user.username, name: user.name };
+		return {
+			username: user.username,
+			name: user.name,
+			user_id: user.user_id,
+			email: user.email,
+		};
 	} else {
 		return null;
 	}
 }
 
 async function signUpUser(requestBody) {
-	const { name, username, password } = requestBody;
+	const { name, username, password, email: emailAddr } = requestBody;
 
-	if (username.length > 25 || password.length > 25 || name.length > 50) {
+	if (
+		username.length > 25 ||
+		password.length > 25 ||
+		name.length > 50 ||
+		emailAddr.length > 255
+	) {
 		throw new BadRequestError("Invalid user data");
 	}
 
 	if ((await usersModel.isUsernameUnique(username)) === false) {
-		return null;
+		throw new ConflictError("Username already exists");
+	}
+	if ((await usersModel.isEmailUnique(emailAddr)) === false) {
+		throw new ConflictError("Email already exists");
 	}
 
 	const insertedUser = await usersModel.insertNewUser(
 		username,
 		password,
 		name,
+		emailAddr,
 	);
 
 	return insertedUser;

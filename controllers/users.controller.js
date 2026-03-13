@@ -22,11 +22,6 @@ async function controlUserSignup(request, response, next) {
 	try {
 		const signedUpUser = await usersService.signUpUser(body);
 
-		if (signedUpUser === null) {
-			next(new ConflictError("Username already exists"));
-			return;
-		}
-
 		response.status(200).send({ signedUpUser });
 	} catch (error) {
 		next(error);
