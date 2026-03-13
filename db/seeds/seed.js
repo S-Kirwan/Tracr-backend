@@ -36,7 +36,7 @@ async function seed({ expeditionsData, usersData, shapesData }) {
                 user_id             INT REFERENCES users(user_id) NOT NULL,
                 shape_id            INT REFERENCES shapes(shape_id),
                 coordinates         GEOMETRY(LINESTRING, 4326),
-                duration_seconds    INTERVAL SECOND,
+                duration		    INTERVAL SECOND,
                 accuracy            SMALLINT CHECK (accuracy >= 0 AND accuracy <= 100),
                 timestamp           TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
@@ -85,7 +85,7 @@ async function seed({ expeditionsData, usersData, shapesData }) {
 		})
 		.join(", ");
 
-	const insertExpeditionsQuery = `INSERT INTO expeditions (user_id, shape_id, coordinates, duration_seconds, accuracy, timestamp) values ${formattedExpeditionsValues}`;
+	const insertExpeditionsQuery = `INSERT INTO expeditions (user_id, shape_id, coordinates, duration, accuracy, timestamp) values ${formattedExpeditionsValues}`;
 
 	await db.query(insertExpeditionsQuery);
 }
