@@ -54,12 +54,35 @@ async function insertNewUser(username, password, name, email) {
 	return insertedUser.rows[0];
 }
 
+async function findUserById(userId) {
+	const user = await db.query(
+		`SELECT * FROM users
+			WHERE user_id = $1
+		`,
+		[userId],
+	);
+
+	if (user.rows.length === 0) {
+		return null;
+	}
+	return user.rows[0];
+}
+
+async function doesUserIdExist(userId) {
+	if ((await findUserById(userId)) === null) {
+		return false;
+	}
+	return true;
+}
+
 const model = {
 	findUserByUsername,
 	isUsernameUnique,
 	insertNewUser,
 	findUserByEmail,
 	isEmailUnique,
+	findUserById,
+	doesUserIdExist,
 };
 
 export default model;
