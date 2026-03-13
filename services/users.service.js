@@ -21,13 +21,13 @@ async function loginUser(username, password) {
 }
 
 async function signUpUser(requestBody) {
-	const { name, username, password, email: emailAddr } = requestBody;
+	const { name, username, password, email } = requestBody;
 
 	if (
 		username.length > 25 ||
 		password.length > 25 ||
 		name.length > 50 ||
-		emailAddr.length > 255
+		email.length > 255
 	) {
 		throw new BadRequestError("Invalid user data");
 	}
@@ -35,7 +35,7 @@ async function signUpUser(requestBody) {
 	if ((await usersModel.isUsernameUnique(username)) === false) {
 		throw new ConflictError("Username already exists");
 	}
-	if ((await usersModel.isEmailUnique(emailAddr)) === false) {
+	if ((await usersModel.isEmailUnique(email)) === false) {
 		throw new ConflictError("Email already exists");
 	}
 
@@ -43,7 +43,7 @@ async function signUpUser(requestBody) {
 		username,
 		password,
 		name,
-		emailAddr,
+		email,
 	);
 
 	return insertedUser;

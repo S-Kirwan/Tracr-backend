@@ -42,13 +42,13 @@ async function isEmailUnique(emailAddr) {
 	return false;
 }
 
-async function insertNewUser(username, password, name, emailAddr) {
+async function insertNewUser(username, password, name, email) {
 	const insertedUser = await db.query(
 		`INSERT INTO users (username, password, name, email)
 			VALUES ($1, $2, $3, $4)
-			RETURNING username, name, user_id;
+			RETURNING username, name, user_id, email;
 		`,
-		[username, password, name, emailAddr],
+		[username, password, name, email],
 	);
 
 	return insertedUser.rows[0];

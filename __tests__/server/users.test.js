@@ -31,6 +31,7 @@ describe("/api/users/login", () => {
 			expect(user.username).toBe("pacePusher");
 			expect(user.name).toBe("James Okafor");
 			expect(typeof user.user_id).toBe("number");
+			expect(user.email).toBe("targethitter@gmail.com");
 			expect(user.password).toBe(undefined);
 		});
 		test("Returns 401 unauthorised with invalid username", async () => {
@@ -97,6 +98,7 @@ describe("/api/users/signup", () => {
 			expect(user.username).toBe("magdalenaCarmen");
 			expect(user.name).toBe("Frida Kahlo");
 			expect(typeof user.user_id).toBe("number");
+			expect(user.email).toBe("muffin@gmail.com");
 			expect(user.password).toBe(undefined);
 		});
 		test("Returns 409 conflict error when username already exists", async () => {
