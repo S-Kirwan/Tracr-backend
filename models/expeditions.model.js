@@ -2,8 +2,12 @@ import db from "../db/connection.js";
 
 async function fetchExpeditionsByUserId(userId) {
 	const expeditions = await db.query(
-		`SELECT * FROM expeditions
-            WHERE user_id = $1;
+		`SELECT *
+			, ST_Length(coordinates::geography) AS distance
+			, ST_AsGeoJSON(coordinates) AS geomJSON
+			FROM expeditions
+            WHERE user_id = $1
+			ORDER BY timestamp DESC;
         `,
 		[userId],
 	);
@@ -13,9 +17,12 @@ async function fetchExpeditionsByUserId(userId) {
 
 async function fetchAllExpeditions() {
 	const expeditions = await db.query(
-		`SELECT * FROM expeditions
+		`SELECT *
+			, ST_Length(coordinates::geography) AS distance
+			, ST_AsGeoJSON(coordinates) AS geomJSON
+			FROM expeditions
 			ORDER BY timestamp DESC;
-		`,
+        `,
 	);
 
 	return expeditions.rows;

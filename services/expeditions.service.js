@@ -1,4 +1,5 @@
 import { usersModel, expeditionsModel } from "../models/index.js";
+import { normaliseTraces } from "./service-utils.js";
 
 async function retrieveExpeditionsByUser(userId) {
 	if ((await usersModel.doesUserIdExist(userId)) === false) {
@@ -7,13 +8,17 @@ async function retrieveExpeditionsByUser(userId) {
 
 	const expeditions = await expeditionsModel.fetchExpeditionsByUserId(userId);
 
-	return expeditions;
+	const normalisedTraces = await normaliseTraces(expeditions);
+
+	return normalisedTraces;
 }
 
 async function retrieveAllExpeditions() {
 	const expeditions = await expeditionsModel.fetchAllExpeditions();
 
-	return expeditions;
+	const normalisedTraces = await normaliseTraces(expeditions);
+
+	return normalisedTraces;
 }
 
 const service = {
