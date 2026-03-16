@@ -2,7 +2,6 @@ import { usersModel, expeditionsModel } from "../models/index.js";
 
 async function retrieveExpeditionsByUser(userId) {
 	if ((await usersModel.doesUserIdExist(userId)) === false) {
-		console.log(userId, "does not exist");
 		return null;
 	}
 
@@ -11,8 +10,15 @@ async function retrieveExpeditionsByUser(userId) {
 	return expeditions;
 }
 
+async function retrieveAllExpeditions() {
+	const expeditions = await expeditionsModel.fetchAllExpeditions();
+
+	return expeditions;
+}
+
 const service = {
 	retrieveExpeditionsByUser,
+	retrieveAllExpeditions,
 };
 
 export default service;
