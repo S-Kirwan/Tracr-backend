@@ -285,7 +285,7 @@ describe("expeditions table", () => {
 			expect(column.type).toBe("LINESTRING");
 		});
 	});
-	describe("duration_seconds", () => {
+	describe("duration", () => {
 		test("duration is interval second", async () => {
 			const {
 				rows: [column],
@@ -294,11 +294,11 @@ describe("expeditions table", () => {
                     FROM pg_catalog.pg_attribute a
                     JOIN pg_catalog.pg_class c ON a.attrelid = c.oid
                     WHERE c.relname = 'expeditions'
-                    AND a.attname = 'duration_seconds'
+                    AND a.attname = 'duration'
                     AND a.attnum > 0;
                 `,
 			);
-			expect(column.attname).toBe("duration_seconds");
+			expect(column.attname).toBe("duration");
 			expect(column.data_type).toBe("interval second");
 		});
 	});
