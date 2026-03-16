@@ -71,4 +71,4 @@ async function normaliseTraces(traces) {
 	return normalisedTraces;
 }
 
-export { createSvg, normaliseTraces };
+export { normaliseTraces };
