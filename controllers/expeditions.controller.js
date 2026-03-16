@@ -1,4 +1,4 @@
-import { BadRequestError, NotFoundError } from "../errors";
+import { BadRequestError, NotFoundError } from "../errors/index.js";
 import { expeditionsService } from "../services/index.js";
 
 async function getExpeditionsByUser(request, response, next) {
