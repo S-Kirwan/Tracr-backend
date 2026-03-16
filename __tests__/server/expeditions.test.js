@@ -64,4 +64,62 @@ describe("api/users/:user_id/expeditons", () => {
 			expect(error).toBe("Bad Request - Invalid user_id");
 		});
 	});
+	describe("Invalid methods", () => {
+		test("Invalid methods return 405 & err msg", async () => {
+			const { body } = await request(app)
+				.post("/api/users/2/expeditions")
+				.expect(405);
+
+			const { error } = body;
+
+			expect(error).toBe(
+				"POST invalid method on /api/users/2/expeditions",
+			);
+		});
+	});
+});
+
+describe("/api/expeditions/", () => {
+	describe("GET", () => {
+		test("Returns all expeditions with valid data", async () => {
+			const { body } = await request(app)
+				.get("/api/expeditions/")
+				.expect(200);
+
+			const { expeditions } = body;
+
+			for (let expedition of expeditions) {
+				expect(typeof expedition.user_id).toBe("number");
+				expect(typeof expedition.shape_id).toBe("number");
+				expect(typeof expedition.timestamp).toBe("string");
+				expect(typeof expedition.duration).toBe("object");
+				expect(typeof expedition.accuracy).toBe("number");
+				expect(typeof expedition.coordinates).toBe("string");
+			}
+		});
+		test("Expeditions are sorted by timestamp descending", async () => {
+			const { body } = await request(app)
+				.get("/api/expeditions/")
+				.expect(200);
+
+			const { expeditions } = body;
+
+			let latestTime = expeditions[0].timestamp;
+			for (let i = 1; i < expeditions.length; i++) {
+				expect(expeditions[i].timestamp < latestTime).toBe(true);
+				latestTime = expeditions[i].timestamp;
+			}
+		});
+	});
+	describe("Invalid methods", () => {
+		test("Invalid methods return 405 & err msg", async () => {
+			const { body } = await request(app)
+				.patch("/api/expeditions")
+				.expect(405);
+
+			const { error } = body;
+
+			expect(error).toBe("PATCH invalid method on /api/expeditions");
+		});
+	});
 });

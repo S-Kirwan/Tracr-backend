@@ -19,8 +19,15 @@ async function getExpeditionsByUser(request, response, next) {
 	response.status(200).send({ expeditions });
 }
 
+async function getAllExpeditions(request, response, next) {
+	const expeditions = await expeditionsService.retrieveAllExpeditions();
+
+	response.status(200).send({ expeditions });
+}
+
 const controller = {
 	getExpeditionsByUser,
+	getAllExpeditions,
 };
 
 export default controller;
