@@ -56,7 +56,7 @@ async function normaliseTraces(traces) {
 
 			const normalisedTrace = {
 				svg: normalisedSvg,
-				distance: trace.distance,
+				distance: Math.floor(trace.distance),
 				duration: trace.duration,
 				timestamp: trace.timestamp,
 				accuracy: trace.accuracy,
