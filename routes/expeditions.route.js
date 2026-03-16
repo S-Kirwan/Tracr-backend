@@ -1,6 +1,6 @@
 import express from "express";
 
-import { expeditionsController } from "../controller/index.js";
+import { expeditionsController } from "../controllers/index.js";
 import { invalidMethod } from "../middleware/index.js";
 
 const router = express.Router();
