@@ -24,12 +24,13 @@ describe("api/users/:user_id/expeditons", () => {
 			const { expeditions } = body;
 
 			for (let expedition of expeditions) {
-				expect(expedition.user_id).toBe(requestedId);
-				expect(typeof expedition.shape_id).toBe("number");
+				expect(expedition.userId).toBe(requestedId);
+				expect(typeof expedition.shapeId).toBe("number");
 				expect(typeof expedition.timestamp).toBe("string");
 				expect(typeof expedition.duration).toBe("object");
 				expect(typeof expedition.accuracy).toBe("number");
-				expect(typeof expedition.coordinates).toBe("string");
+				expect(typeof expedition.svg).toBe("string");
+				expect(typeof expedition.distance).toBe("number");
 			}
 		});
 		test("Returns empty array when userId has no expeditions", async () => {
@@ -89,12 +90,13 @@ describe("/api/expeditions/", () => {
 			const { expeditions } = body;
 
 			for (let expedition of expeditions) {
-				expect(typeof expedition.user_id).toBe("number");
-				expect(typeof expedition.shape_id).toBe("number");
+				expect(typeof expedition.userId).toBe("number");
+				expect(typeof expedition.shapeId).toBe("number");
 				expect(typeof expedition.timestamp).toBe("string");
 				expect(typeof expedition.duration).toBe("object");
 				expect(typeof expedition.accuracy).toBe("number");
-				expect(typeof expedition.coordinates).toBe("string");
+				expect(typeof expedition.svg).toBe("string");
+				expect(typeof expedition.distance).toBe("number");
 			}
 		});
 		test("Expeditions are sorted by timestamp descending", async () => {
