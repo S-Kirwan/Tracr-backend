@@ -64,6 +64,8 @@ async function normaliseTraces(traces) {
 				shapeId: trace.shape_id,
 			};
 
+			if (trace.username !== undefined)
+				normalisedTrace.username = trace.username;
 			return normalisedTrace;
 		}),
 	);
@@ -83,4 +85,5 @@ function durationObjToSeconds({
 
 	return daysInSeconds + hoursInSeconds + minutesInSeconds + seconds;
 }
+
 export { normaliseTraces, durationObjToSeconds };
