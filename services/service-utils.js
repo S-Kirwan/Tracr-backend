@@ -1,24 +1,43 @@
 function createBoundingBox(coords) {
 	let minX = Infinity;
 	let minY = Infinity;
+	let maxX = -Infinity;
+	let maxY = -Infinity;
 
 	for (let point of coords) {
 		if (point[0] < minX) {
 			minX = point[0];
 		}
+		if (point[0] > maxX) {
+			maxX = point[0];
+		}
 		if (point[1] < minY) {
 			minY = point[1];
 		}
+		if (point[1] > maxY) {
+			maxY = point[1];
+		}
 	}
 
-	return { minX, minY };
+	return { minX, minY, maxX, maxY };
 }
 
-function normaliseTraceCoords(coords, boundingBox) {
+function normaliseTraceCoords(coords, boundingBox, svgWidth, svgHeight) {
+	const width = boundingBox.maxX - boundingBox.minX;
+	const height = boundingBox.maxY - boundingBox.minY;
+	const padding = 0.1;
+
+	const xScale = (svgWidth * (1 - padding)) / width;
+	const yScale = (svgHeight * (1 - padding)) / height;
+
 	const normalisedRoute = coords.map((point) => {
 		const normalisedPoint = {
-			x: (point[0] - boundingBox.minX) * 1000000,
-			y: (point[1] - boundingBox.minY) * 1000000,
+			x:
+				(point[0] - boundingBox.minX) * xScale +
+				(svgWidth * padding) / 2,
+			y:
+				(point[1] - boundingBox.minY) * yScale +
+				(svgHeight * padding) / 2,
 		};
 
 		return normalisedPoint;
