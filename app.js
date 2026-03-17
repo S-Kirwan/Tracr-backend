@@ -8,6 +8,7 @@ import {
 	shapesRouter,
 	usersRouter,
 	expeditionsRouter,
+	leaderboardsRouter,
 } from "./routes/index.js";
 
 const app = express();
@@ -18,6 +19,7 @@ app.use(express.json());
 app.use("/api/shapes", shapesRouter);
 app.use("/api/users", usersRouter);
 app.use("/api/expeditions", expeditionsRouter);
+app.use("/api/leaderboards", leaderboardsRouter);
 
 app.all("/*splat", urlNotFound);
 
