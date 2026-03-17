@@ -33,6 +33,7 @@ describe("api/leaderboards", () => {
 				expect(typeof leaderboard[i].distance).toBe("number");
 				expect(typeof leaderboard[i].timestamp).toBe("string");
 				expect(typeof leaderboard[i].duration).toBe("object");
+				expect(typeof leaderboard[i].username).toBe("string");
 				expect(timestamps[i]).toBeLessThan(timestamps[i - 1]);
 			}
 		});
@@ -50,6 +51,8 @@ describe("api/leaderboards", () => {
 				expect(typeof leaderboard[i].distance).toBe("number");
 				expect(typeof leaderboard[i].timestamp).toBe("string");
 				expect(typeof leaderboard[i].duration).toBe("object");
+				expect(typeof leaderboard[i].username).toBe("string");
+
 				expect(distances[i]).toBeGreaterThan(distances[i - 1]);
 			}
 		});
@@ -70,6 +73,8 @@ describe("api/leaderboards", () => {
 				expect(typeof leaderboard[i].distance).toBe("number");
 				expect(typeof leaderboard[i].timestamp).toBe("string");
 				expect(typeof leaderboard[i].duration).toBe("object");
+				expect(typeof leaderboard[i].username).toBe("string");
+
 				expect(durations[i]).toBeLessThan(durations[i - 1]);
 			}
 		});
@@ -88,6 +93,8 @@ describe("api/leaderboards", () => {
 				expect(typeof leaderboard[i].distance).toBe("number");
 				expect(typeof leaderboard[i].timestamp).toBe("string");
 				expect(typeof leaderboard[i].duration).toBe("object");
+				expect(typeof leaderboard[i].username).toBe("string");
+
 				expect(scores[i]).toBeLessThan(scores[i - 1]);
 			}
 		});
@@ -110,6 +117,8 @@ describe("api/leaderboards", () => {
 					expect(typeof leaderboard[i].distance).toBe("number");
 					expect(typeof leaderboard[i].timestamp).toBe("string");
 					expect(typeof leaderboard[i].duration).toBe("object");
+					expect(typeof leaderboard[i].username).toBe("string");
+
 					expect(entryDates[i].getTime()).toBeGreaterThan(
 						cutOffDate.getTime(),
 					);
@@ -133,6 +142,8 @@ describe("api/leaderboards", () => {
 					expect(typeof leaderboard[i].distance).toBe("number");
 					expect(typeof leaderboard[i].timestamp).toBe("string");
 					expect(typeof leaderboard[i].duration).toBe("object");
+					expect(typeof leaderboard[i].username).toBe("string");
+
 					expect(entryDates[i].getTime()).toBeGreaterThan(
 						cutOffDate.getTime(),
 					);
@@ -156,6 +167,8 @@ describe("api/leaderboards", () => {
 					expect(typeof leaderboard[i].distance).toBe("number");
 					expect(typeof leaderboard[i].timestamp).toBe("string");
 					expect(typeof leaderboard[i].duration).toBe("object");
+					expect(typeof leaderboard[i].username).toBe("string");
+
 					expect(entryDates[i].getTime()).toBeGreaterThan(
 						cutOffDate.getTime(),
 					);
@@ -179,6 +192,8 @@ describe("api/leaderboards", () => {
 					expect(typeof leaderboard[i].distance).toBe("number");
 					expect(typeof leaderboard[i].timestamp).toBe("string");
 					expect(typeof leaderboard[i].duration).toBe("object");
+					expect(typeof leaderboard[i].username).toBe("string");
+
 					expect(entryDates[i].getTime()).toBeGreaterThan(
 						cutOffDate.getTime(),
 					);

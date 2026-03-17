@@ -33,6 +33,75 @@ describe("api/users/:user_id/expeditons", () => {
 				expect(typeof expedition.distance).toBe("number");
 			}
 		});
+		describe("Query parameters", () => {
+			test("Accuracy query", async () => {
+				const requestedId = 2;
+				const { body } = await request(app)
+					.get(
+						`/api/users/${requestedId}/expeditions?sort_by=accuracy&order=asc`,
+					)
+					.expect(200);
+
+				const { expeditions } = body;
+
+				const scores = expeditions.map((trace) => trace.accuracy);
+
+				expect(Array.isArray(expeditions)).toBe(true);
+				for (let i = 1; i < expeditions.length; i++) {
+					expect(typeof expeditions[i].accuracy).toBe("number");
+					expect(typeof expeditions[i].distance).toBe("number");
+					expect(typeof expeditions[i].timestamp).toBe("string");
+					expect(typeof expeditions[i].duration).toBe("object");
+					expect(scores[i]).toBeGreaterThan(scores[i - 1]);
+				}
+			});
+			test("Duration query", async () => {
+				const requestedId = 2;
+				const { body } = await request(app)
+					.get(
+						`/api/users/${requestedId}/expeditions?sort_by=duration&order=desc`,
+					)
+					.expect(200);
+
+				const { expeditions } = body;
+
+				const distances = expeditions.map((trace) => trace.distance);
+
+				expect(Array.isArray(expeditions)).toBe(true);
+				for (let i = 1; i < expeditions.length; i++) {
+					expect(typeof expeditions[i].accuracy).toBe("number");
+					expect(typeof expeditions[i].distance).toBe("number");
+					expect(typeof expeditions[i].timestamp).toBe("string");
+					expect(typeof expeditions[i].duration).toBe("object");
+					expect(distances[i]).toBeLessThan(distances[i - 1]);
+				}
+			});
+			test("Week query", async () => {
+				const requestedId = 2;
+				const { body } = await request(app)
+					.get(`/api/users/${requestedId}/expeditions?time=week`)
+					.expect(200);
+
+				const { expeditions } = body;
+
+				const cutOffDate = new Date();
+				cutOffDate.setDate(cutOffDate.getDate() - 7);
+
+				const entryDates = expeditions.map(
+					(entry) => new Date(entry.timestamp),
+				);
+				expect(Array.isArray(expeditions)).toBe(true);
+				for (let i = 1; i < expeditions.length; i++) {
+					expect(typeof expeditions[i].accuracy).toBe("number");
+					expect(typeof expeditions[i].distance).toBe("number");
+					expect(typeof expeditions[i].timestamp).toBe("string");
+					expect(typeof expeditions[i].duration).toBe("object");
+					expect(entryDates[i].getTime()).toBeGreaterThan(
+						cutOffDate.getTime(),
+					);
+				}
+			});
+		});
 		test("Returns empty array when userId has no expeditions", async () => {
 			const requestedId = 6;
 			const { body } = await request(app)

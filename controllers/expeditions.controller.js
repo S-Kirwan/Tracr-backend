@@ -1,6 +1,6 @@
 import { BadRequestError, NotFoundError } from "../errors/index.js";
 import { expeditionsService } from "../services/index.js";
-import { validateLeaderboardsQuery } from "./controller-utils.js";
+import { validateTracesQuery } from "./controller-utils.js";
 
 async function getExpeditionsByUser(request, response, next) {
 	const user_id = request.params.user_id;
@@ -9,8 +9,19 @@ async function getExpeditionsByUser(request, response, next) {
 		next(new BadRequestError("Bad Request - Invalid user_id"));
 	}
 
-	const expeditions =
-		await expeditionsService.retrieveExpeditionsByUser(user_id);
+	const { query } = request;
+
+	const validatedQuery = validateTracesQuery(query);
+
+	if (validatedQuery instanceof Error) {
+		next(validatedQuery);
+		return;
+	}
+
+	const expeditions = await expeditionsService.retrieveExpeditionsByUser(
+		user_id,
+		query,
+	);
 
 	if (expeditions === null) {
 		next(new NotFoundError("User not found"));
@@ -29,7 +40,7 @@ async function getAllExpeditions(request, response, next) {
 async function getLeaderboardExpeditions(request, response, next) {
 	const { query } = request;
 
-	const validatedQuery = validateLeaderboardsQuery(query);
+	const validatedQuery = validateTracesQuery(query);
 
 	if (validatedQuery instanceof Error) {
 		next(validatedQuery);
