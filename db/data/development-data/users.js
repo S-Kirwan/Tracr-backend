@@ -24,7 +24,7 @@ const usersData = [
 		email: "ninjaturtle@gmail.com",
 	},
 	{
-		username: "user1",
+		username: "Mark",
 		password: "123",
 		name: "Test",
 		email: "test@gmail.com",
