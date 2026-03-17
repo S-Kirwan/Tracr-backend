@@ -1,6 +1,6 @@
 import { UnprocessableContentError } from "../errors/index.js";
 
-function validateLeaderboardsQuery(query) {
+function validateTracesQuery(query) {
 	const VALID_SORT_BY = ["duration", "accuracy", "timestamp", "distance"];
 	const VALID_TIME = ["day", "week", "month", "year"];
 	const VALID_ORDER = ["ASC", "DESC"];
@@ -25,10 +25,10 @@ function validateLeaderboardsQuery(query) {
 			return new UnprocessableContentError("Invalid time query");
 		}
 	} else {
-		query.time = "all time";
+		query.time = "allTime";
 	}
 
 	return query;
 }
 
-export { validateLeaderboardsQuery };
+export { validateTracesQuery };
