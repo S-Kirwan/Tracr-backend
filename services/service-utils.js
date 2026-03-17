@@ -71,4 +71,16 @@ async function normaliseTraces(traces) {
 	return normalisedTraces;
 }
 
-export { normaliseTraces };
+function durationObjToSeconds({
+	days = 0,
+	hours = 0,
+	minutes = 0,
+	seconds = 0,
+}) {
+	const daysInSeconds = days * 86400;
+	const hoursInSeconds = hours * 3600;
+	const minutesInSeconds = minutes * 60;
+
+	return daysInSeconds + hoursInSeconds + minutesInSeconds + seconds;
+}
+export { normaliseTraces, durationObjToSeconds };

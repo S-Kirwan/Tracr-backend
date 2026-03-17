@@ -28,9 +28,38 @@ async function fetchAllExpeditions() {
 	return expeditions.rows;
 }
 
+async function fetchLeaderboard(sortBy, order, time) {
+	const leaderboard = await db.query(
+		`SELECT *
+			, ST_Length(coordinates::geography) AS distance
+			, ST_AsGeoJSON(coordinates) AS geomJSON
+			FROM expeditions
+			WHERE timestamp >= NOW() - INTERVAL '${time}'
+			ORDER BY ${sortBy} ${order}
+        `,
+	);
+
+	return leaderboard.rows;
+}
+
+async function fetchLeaderboardAllTime(sortBy, order) {
+	const leaderboard = await db.query(
+		`SELECT *
+			, ST_Length(coordinates::geography) AS distance
+			, ST_AsGeoJSON(coordinates) AS geomJSON
+			FROM expeditions
+			ORDER BY ${sortBy} ${order}
+		`,
+	);
+
+	return leaderboard.rows;
+}
+
 const model = {
 	fetchExpeditionsByUserId,
 	fetchAllExpeditions,
+	fetchLeaderboard,
+	fetchLeaderboardAllTime,
 };
 
 export default model;
