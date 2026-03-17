@@ -185,5 +185,45 @@ describe("api/leaderboards", () => {
 				}
 			});
 		});
+		describe("Invalid parameters return unprocessable content error", () => {
+			test("Invalid sort_by", async () => {
+				const { body } = await request(app)
+					.get("/api/leaderboards?sort_by=pineapple&order=desc")
+					.expect(422);
+
+				const { error } = body;
+
+				expect(error).toBe("Invalid sort query");
+			});
+			test("Invalid time", async () => {
+				const { body } = await request(app)
+					.get("/api/leaderboards?time=mainecoon")
+					.expect(422);
+
+				const { error } = body;
+
+				expect(error).toBe("Invalid time query");
+			});
+			test("Invalid order", async () => {
+				const { body } = await request(app)
+					.get("/api/leaderboards?sort_by=accuracy&order=sausagedog")
+					.expect(422);
+
+				const { error } = body;
+
+				expect(error).toBe("Invalid order query");
+			});
+			test("All queries invalid", async () => {
+				const { body } = await request(app)
+					.get(
+						"/api/leaderboards?sort_by=chair&order=dachshund&time=future",
+					)
+					.expect(422);
+
+				const { error } = body;
+
+				expect(error).toBe("Invalid sort query");
+			});
+		});
 	});
 });
