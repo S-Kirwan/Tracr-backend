@@ -2,10 +2,10 @@
   "name": "tracr-backend",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "listen.js",
   "scripts": {
     "prepare": "husky",
-    "test": "node --experimental-vm-modules ./node_modules/.bin/jest",
+    "test": "node --experimental-vm-modules ./node_modules/.bin/jest --runInBand",
     "setup-dbs": "psql -f ./db/setup-dbs.sql",
     "seed": "node ./db/seeds/run-seed.js",
     "seed-prod": "NODE_ENV=production npm run seed",
@@ -39,6 +39,8 @@
     "supertest": "^7.2.2"
   },
   "dependencies": {
+    "bcrypt": "^6.0.0",
+    "cors": "^2.8.6",
     "dotenv": "^17.3.1",
     "express": "^5.2.1",
     "express-validation": "^4.1.1",

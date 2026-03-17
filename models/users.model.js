@@ -1,0 +1,88 @@
+import db from "../db/connection.js";
+
+async function findUserByUsername(username) {
+	const user = await db.query(
+		`SELECT * FROM users
+            WHERE username = $1;
+        `,
+		[username],
+	);
+
+	if (user.rows.length === 0) {
+		return null;
+	}
+	return user.rows[0];
+}
+
+async function isUsernameUnique(username) {
+	if ((await findUserByUsername(username)) === null) {
+		return true;
+	}
+	return false;
+}
+
+async function findUserByEmail(emailAddr) {
+	const user = await db.query(
+		`SELECT * FROM users
+			WHERE email = $1;
+		`,
+		[emailAddr],
+	);
+
+	if (user.rows.length === 0) {
+		return null;
+	}
+	return user.rows[0];
+}
+
+async function isEmailUnique(emailAddr) {
+	if ((await findUserByEmail(emailAddr)) === null) {
+		return true;
+	}
+	return false;
+}
+
+async function insertNewUser(username, password, name, email) {
+	const insertedUser = await db.query(
+		`INSERT INTO users (username, password, name, email)
+			VALUES ($1, $2, $3, $4)
+			RETURNING username, name, user_id, email;
+		`,
+		[username, password, name, email],
+	);
+
+	return insertedUser.rows[0];
+}
+
+async function findUserById(userId) {
+	const user = await db.query(
+		`SELECT * FROM users
+			WHERE user_id = $1
+		`,
+		[userId],
+	);
+
+	if (user.rows.length === 0) {
+		return null;
+	}
+	return user.rows[0];
+}
+
+async function doesUserIdExist(userId) {
+	if ((await findUserById(userId)) === null) {
+		return false;
+	}
+	return true;
+}
+
+const model = {
+	findUserByUsername,
+	isUsernameUnique,
+	insertNewUser,
+	findUserByEmail,
+	isEmailUnique,
+	findUserById,
+	doesUserIdExist,
+};
+
+export default model;
