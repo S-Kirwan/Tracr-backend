@@ -59,7 +59,12 @@ function parseCoords(coords) {
 
 function createSvg(coordinates) {
 	const boundingBox = createBoundingBox(coordinates);
-	const normalisedTrace = normaliseTraceCoords(coordinates, boundingBox);
+	const normalisedTrace = normaliseTraceCoords(
+		coordinates,
+		boundingBox,
+		100,
+		100,
+	);
 	const parsedCoords = parseCoords(normalisedTrace);
 
 	return `<svg height="100" width="100" stroke="red" fill="none" xmlns="http://www.w3.org/2000/svg">
