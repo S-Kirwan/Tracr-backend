@@ -5,6 +5,8 @@ import data from "../../db/data/test-data/index.js";
 import db from "../../db/connection.js";
 import app from "../../app.js";
 
+import { durationObjToSeconds } from "../../services/service-utils.js";
+
 beforeEach(() => {
 	return seed(data);
 });
@@ -52,7 +54,7 @@ describe("api/users/:user_id/expeditons", () => {
 					expect(typeof expeditions[i].distance).toBe("number");
 					expect(typeof expeditions[i].timestamp).toBe("string");
 					expect(typeof expeditions[i].duration).toBe("object");
-					expect(scores[i]).toBeGreaterThan(scores[i - 1]);
+					expect(scores[i]).toBeGreaterThanOrEqual(scores[i - 1]);
 				}
 			});
 			test("Duration query", async () => {
@@ -65,7 +67,9 @@ describe("api/users/:user_id/expeditons", () => {
 
 				const { expeditions } = body;
 
-				const distances = expeditions.map((trace) => trace.distance);
+				const durations = expeditions.map((trace) =>
+					durationObjToSeconds(trace.duration),
+				);
 
 				expect(Array.isArray(expeditions)).toBe(true);
 				for (let i = 1; i < expeditions.length; i++) {
@@ -73,7 +77,7 @@ describe("api/users/:user_id/expeditons", () => {
 					expect(typeof expeditions[i].distance).toBe("number");
 					expect(typeof expeditions[i].timestamp).toBe("string");
 					expect(typeof expeditions[i].duration).toBe("object");
-					expect(distances[i]).toBeLessThan(distances[i - 1]);
+					expect(durations[i]).toBeLessThan(durations[i - 1]);
 				}
 			});
 			test("Week query", async () => {

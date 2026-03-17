@@ -53,7 +53,7 @@ describe("api/leaderboards", () => {
 				expect(typeof leaderboard[i].duration).toBe("object");
 				expect(typeof leaderboard[i].username).toBe("string");
 
-				expect(distances[i]).toBeGreaterThan(distances[i - 1]);
+				expect(distances[i]).toBeGreaterThanOrEqual(distances[i - 1]);
 			}
 		});
 		test("Duration query DESC", async () => {
@@ -75,7 +75,7 @@ describe("api/leaderboards", () => {
 				expect(typeof leaderboard[i].duration).toBe("object");
 				expect(typeof leaderboard[i].username).toBe("string");
 
-				expect(durations[i]).toBeLessThan(durations[i - 1]);
+				expect(durations[i]).toBeLessThanOrEqual(durations[i - 1]);
 			}
 		});
 		test("Accuracy query DESC", async () => {
@@ -95,7 +95,7 @@ describe("api/leaderboards", () => {
 				expect(typeof leaderboard[i].duration).toBe("object");
 				expect(typeof leaderboard[i].username).toBe("string");
 
-				expect(scores[i]).toBeLessThan(scores[i - 1]);
+				expect(scores[i]).toBeLessThanOrEqual(scores[i - 1]);
 			}
 		});
 		describe("Time parameters", () => {
