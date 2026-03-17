@@ -21,9 +21,42 @@ async function retrieveAllExpeditions() {
 	return normalisedTraces;
 }
 
+async function retrieveLeaderboards(query) {
+	const { sort_by: sortBy, order, time } = query;
+
+	const intervalMap = {
+		day: "1 day",
+		week: "7 days",
+		month: "1 month",
+		year: "1 year",
+	};
+
+	const intervalTime = intervalMap[time];
+
+	let leaderboard = [];
+
+	if (intervalTime === undefined) {
+		leaderboard = await expeditionsModel.fetchLeaderboardAllTime(
+			sortBy,
+			order,
+		);
+	} else {
+		leaderboard = await expeditionsModel.fetchLeaderboard(
+			sortBy,
+			order,
+			intervalTime,
+		);
+	}
+
+	const normalisedLeaderboard = await normaliseTraces(leaderboard);
+
+	return normalisedLeaderboard;
+}
+
 const service = {
 	retrieveExpeditionsByUser,
 	retrieveAllExpeditions,
+	retrieveLeaderboards,
 };
 
 export default service;

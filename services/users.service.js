@@ -50,4 +50,5 @@ async function signUpUser(requestBody) {
 }
 
 const service = { loginUser, signUpUser };
+
 export default service;
