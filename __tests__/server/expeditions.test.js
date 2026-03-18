@@ -31,7 +31,7 @@ describe("api/users/:user_id/expeditons", () => {
 				expect(typeof expedition.timestamp).toBe("string");
 				expect(typeof expedition.duration).toBe("object");
 				expect(typeof expedition.accuracy).toBe("number");
-				expect(typeof expedition.svg).toBe("string");
+				expect(typeof expedition.svgPoints).toBe("string");
 				expect(typeof expedition.distance).toBe("number");
 			}
 		});
@@ -168,7 +168,7 @@ describe("/api/expeditions/", () => {
 				expect(typeof expedition.timestamp).toBe("string");
 				expect(typeof expedition.duration).toBe("object");
 				expect(typeof expedition.accuracy).toBe("number");
-				expect(typeof expedition.svg).toBe("string");
+				expect(typeof expedition.svgPoints).toBe("string");
 				expect(typeof expedition.distance).toBe("number");
 			}
 		});
