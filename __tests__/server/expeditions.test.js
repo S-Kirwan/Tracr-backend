@@ -186,6 +186,31 @@ describe("/api/expeditions/", () => {
 			}
 		});
 	});
+	describe("POST", () => {
+		test("Posting valid values inserts into db", async () => {
+			const expedition = {
+				userId: 1,
+				shapeId: 3,
+				coordinates: [
+					{
+						longitude: 0.13066,
+						latitude: 51.51452,
+					},
+					{
+						longitude: 0.13069,
+						latitude: 51.51457,
+					},
+				],
+				duration: 500,
+				accuracy: 20,
+			};
+
+			const { body } = await request(app)
+				.post("/api/expeditions")
+				.send(expedition)
+				.expect(200);
+		});
+	});
 	describe("Invalid methods", () => {
 		test("Invalid methods return 405 & err msg", async () => {
 			const { body } = await request(app)
