@@ -58,12 +58,36 @@ async function updateShapeLastDaily(shape_id) {
         `,
 	);
 }
+
+async function fetchShapeById(shapeId) {
+	const shape = await db.query(
+		`SELECT * FROM shapes
+			WHERE shape_id = $1
+		`,
+		[shapeId],
+	);
+
+	if (shape.rows.length === 0) {
+		return null;
+	}
+	return shape.rows[0];
+}
+
+async function doesShapeExist(shapeId) {
+	if ((await fetchShapeById(shapeId)) === null) {
+		return false;
+	}
+	return true;
+}
+
 const model = {
 	fetchAllShapes,
 	fetchDailyShape,
 	fetchUnusedDailyShapes,
 	fetchAvailableDailyShapes,
 	updateShapeLastDaily,
+	fetchShapeById,
+	doesShapeExist,
 };
 
 export default model;
