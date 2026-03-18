@@ -1,3 +1,5 @@
+import { parse } from "dotenv";
+
 function createBoundingBox(coords) {
 	let minX = Infinity;
 	let minY = Infinity;
@@ -51,11 +53,11 @@ function normaliseTraceCoords(coords, boundingBox, svgWidth, svgHeight) {
 }
 
 function parseCoords(coords) {
-	let parsedCoords = "";
+	let parsedCoords = ""
 	for (let point of coords) {
 		const x = point.x.toFixed(4);
 		const y = point.y.toFixed(4);
-		parsedCoords += `${x} ${y}, `;
+		parsedCoords += `${x} ${y}, `
 	}
 
 	return parsedCoords;
@@ -71,19 +73,17 @@ function createSvg(coordinates) {
 	);
 	const parsedCoords = parseCoords(normalisedTrace);
 
-	return `<svg height="100" width="100" stroke="red" fill="none" xmlns="http://www.w3.org/2000/svg">
-			<polyline points="${parsedCoords}"/>
-		</svg>`;
+	return parsedCoords;
 }
 
 async function normaliseTraces(traces) {
 	const normalisedTraces = await Promise.all(
 		traces.map(async (trace) => {
 			const linestring = await JSON.parse(trace.geomjson);
-			const normalisedSvg = createSvg(linestring.coordinates);
+			const normalisedSvgPoints = createSvg(linestring.coordinates);
 
 			const normalisedTrace = {
-				svg: normalisedSvg,
+				svgPoints: normalisedSvgPoints,
 				distance: Math.floor(trace.distance),
 				duration: trace.duration,
 				timestamp: trace.timestamp,
