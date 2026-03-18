@@ -1,5 +1,5 @@
-import { usersModel, expeditionsModel } from "../models/index.js";
-import { normaliseTraces } from "./service-utils.js";
+import { usersModel, expeditionsModel, shapesModel } from "../models/index.js";
+import { normaliseTraces, coordinatesToLinestring } from "./service-utils.js";
 
 async function retrieveExpeditionsByUser(userId, query) {
 	if ((await usersModel.doesUserIdExist(userId)) === false) {
@@ -79,10 +79,48 @@ async function retrieveLeaderboards(query) {
 	return normalisedLeaderboard;
 }
 
+async function addExpedition(expedition) {
+	const { shapeId, userId, coordinates, duration, accuracy } = expedition;
+
+	if ((await usersModel.doesUserIdExist(userId)) === false) {
+		return false;
+	}
+
+	if ((await shapesModel.doesShapeExist(shapeId)) === false) {
+		return false;
+	}
+
+	const linestring = coordinatesToLinestring(coordinates);
+
+	await expeditionsModel.insertExpedition(
+		shapeId,
+		userId,
+		linestring,
+		duration,
+		accuracy,
+	);
+
+	return true;
+}
+
+async function retrieveExpeditionById(expedition_id) {
+	const expedition =
+		await expeditionsModel.fetchExpeditionById(expedition_id);
+
+	if (expedition === null) {
+		return null;
+	}
+	const normalisedExpedition = await normaliseTraces([expedition]);
+
+	return normalisedExpedition[0];
+}
+
 const service = {
 	retrieveExpeditionsByUser,
 	retrieveAllExpeditions,
 	retrieveLeaderboards,
+	addExpedition,
+	retrieveExpeditionById,
 };
 
 export default service;

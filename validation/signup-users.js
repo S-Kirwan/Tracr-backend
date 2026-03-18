@@ -6,7 +6,7 @@ const signupUserSchema = {
 		email: Joi.string().required(),
 		username: Joi.string().required(),
 		password: Joi.string().required(),
-	}),
+	}).required(),
 };
 
 export default signupUserSchema;

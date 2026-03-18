@@ -1,5 +1,3 @@
-import { parse } from "dotenv";
-
 function createBoundingBox(coords) {
 	let minX = Infinity;
 	let minY = Infinity;
@@ -20,7 +18,6 @@ function createBoundingBox(coords) {
 			maxY = point[1];
 		}
 	}
-
 	return { minX, minY, maxX, maxY };
 }
 
@@ -53,11 +50,11 @@ function normaliseTraceCoords(coords, boundingBox, svgWidth, svgHeight) {
 }
 
 function parseCoords(coords) {
-	let parsedCoords = ""
+	let parsedCoords = "";
 	for (let point of coords) {
 		const x = point.x.toFixed(4);
 		const y = point.y.toFixed(4);
-		parsedCoords += `${x} ${y}, `
+		parsedCoords += `${x} ${y}, `;
 	}
 
 	return parsedCoords;
@@ -114,4 +111,17 @@ function durationObjToSeconds({
 	return daysInSeconds + hoursInSeconds + minutesInSeconds + seconds;
 }
 
-export { normaliseTraces, durationObjToSeconds };
+function coordinatesToLinestring(coordinates) {
+	let linestring = `LINESTRING(`;
+	for (let i = 0; i < coordinates.length; i++) {
+		linestring += `${coordinates[i].longitude} ${coordinates[i].latitude}`;
+		if (i !== coordinates.length - 1) {
+			linestring += `, `;
+		}
+	}
+	linestring += `)`;
+
+	return linestring;
+}
+
+export { normaliseTraces, durationObjToSeconds, coordinatesToLinestring };

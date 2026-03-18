@@ -85,7 +85,9 @@ async function seed({ expeditionsData, usersData, shapesData }) {
 		})
 		.join(", ");
 
-	const insertExpeditionsQuery = `INSERT INTO expeditions (user_id, shape_id, coordinates, duration, accuracy, timestamp) values ${formattedExpeditionsValues}`;
+	const insertExpeditionsQuery = `INSERT INTO expeditions
+										(user_id, shape_id, coordinates, duration, accuracy, timestamp)
+										values ${formattedExpeditionsValues}`;
 
 	await db.query(insertExpeditionsQuery);
 }

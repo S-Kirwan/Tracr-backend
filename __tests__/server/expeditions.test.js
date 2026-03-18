@@ -187,7 +187,7 @@ describe("/api/expeditions/", () => {
 		});
 	});
 	describe("POST", () => {
-		test("Posting valid values inserts into db", async () => {
+		test("Posting valid values returns 200", async () => {
 			const expedition = {
 				userId: 1,
 				shapeId: 3,
@@ -205,10 +205,187 @@ describe("/api/expeditions/", () => {
 				accuracy: 20,
 			};
 
-			const { body } = await request(app)
+			await request(app)
 				.post("/api/expeditions")
 				.send(expedition)
 				.expect(200);
+		});
+		test("Invalid posted expedition has 422 error", async () => {
+			const expedition = {
+				userId: 2,
+				coordinates: [
+					{
+						longitude: 0.13066,
+						latitude: 51.51452,
+					},
+					{
+						longitude: 0.13069,
+						latitude: 51.51457,
+					},
+				],
+				duration: 200,
+				accuracy: 20,
+			};
+
+			const { body } = await request(app)
+				.post("/api/expeditions")
+				.send(expedition)
+				.expect(422);
+
+			const { error } = body;
+
+			expect(error).toBe("Validation Failed");
+		});
+		test("Invalid coordinates object in coordinates array has 422 error", async () => {
+			const expedition = {
+				userId: 2,
+				coordinates: [
+					{
+						long: 0.13066,
+						lat: 51.51452,
+					},
+					{
+						longitude: 0.13069,
+						latitude: 51.51457,
+					},
+				],
+				duration: 200,
+				accuracy: 20,
+			};
+
+			const { body } = await request(app)
+				.post("/api/expeditions")
+				.send(expedition)
+				.expect(422);
+
+			const { error } = body;
+
+			expect(error).toBe("Validation Failed");
+
+			const expedition_two = {
+				userId: 2,
+				coordinates: [
+					{
+						longitude: "0.13066",
+						latitude: "51.51452",
+					},
+					{
+						longitude: 0.13069,
+						latitude: 51.51457,
+					},
+				],
+				duration: 200,
+				accuracy: 20,
+			};
+
+			const { body: body_two } = await request(app)
+				.post("/api/expeditions")
+				.send(expedition_two)
+				.expect(422);
+
+			const { error: error_two } = body_two;
+
+			expect(error_two).toBe("Validation Failed");
+		});
+		test("Posted expedition has userId which doesn't exist", async () => {
+			const expedition = {
+				userId: 21474836,
+				shapeId: 4,
+				coordinates: [
+					{
+						longitude: 0.13066,
+						latitude: 51.51452,
+					},
+					{
+						longitude: 0.13069,
+						latitude: 51.51457,
+					},
+				],
+				duration: 200,
+				accuracy: 20,
+			};
+
+			const { body } = await request(app)
+				.post("/api/expeditions")
+				.send(expedition)
+				.expect(404);
+
+			const { error } = body;
+
+			expect(error).toBe("Not found - user or shape id does not exist");
+		});
+		test("Posted expedition has shapeId which doesn't exist", async () => {
+			const expedition = {
+				userId: 2,
+				shapeId: 21474836,
+				coordinates: [
+					{
+						longitude: 0.13066,
+						latitude: 51.51452,
+					},
+					{
+						longitude: 0.13069,
+						latitude: 51.51457,
+					},
+				],
+				duration: 200,
+				accuracy: 20,
+			};
+
+			const { body } = await request(app)
+				.post("/api/expeditions")
+				.send(expedition)
+				.expect(404);
+
+			const { error } = body;
+
+			expect(error).toBe("Not found - user or shape id does not exist");
+		});
+		test("Posted expedition can be retrieved from database, has timestamp defaulted to now", async () => {
+			const {
+				body: { expeditions: allExpeditions },
+			} = await request(app).get("/api/expeditions");
+
+			const insertedExpeditionId = allExpeditions.length + 1;
+
+			const expedition = {
+				userId: 1,
+				shapeId: 3,
+				coordinates: [
+					{
+						longitude: 0.13066,
+						latitude: 51.51452,
+					},
+					{
+						longitude: 0.13069,
+						latitude: 51.51457,
+					},
+				],
+				duration: 500,
+				accuracy: 20,
+			};
+
+			await request(app)
+				.post("/api/expeditions")
+				.send(expedition)
+				.expect(200);
+
+			const { body } = await request(app).get(
+				`/api/expeditions/${insertedExpeditionId}`,
+			);
+
+			const { expedition: postedExpedition } = body;
+
+			expect(postedExpedition.accuracy).toBe(20);
+			expect(durationObjToSeconds(postedExpedition.duration)).toBe(500);
+			expect(postedExpedition.userId).toBe(1);
+			expect(postedExpedition.shapeId).toBe(3);
+			expect(typeof postedExpedition.svgPoints).toBe("string");
+			expect(typeof postedExpedition.distance).toBe("number");
+			expect(new Date(postedExpedition.timestamp).getTime()).toBeCloseTo(
+				Date.now(),
+				-5,
+			);
 		});
 	});
 	describe("Invalid methods", () => {

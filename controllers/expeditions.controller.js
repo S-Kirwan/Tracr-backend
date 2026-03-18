@@ -52,10 +52,44 @@ async function getLeaderboardExpeditions(request, response, next) {
 	response.status(200).send({ leaderboard });
 }
 
+async function postExpedition(request, response, next) {
+	const { body } = request;
+
+	const postStatus = await expeditionsService.addExpedition(body);
+
+	if (postStatus === false) {
+		next(new NotFoundError("Not found - user or shape id does not exist"));
+		return;
+	}
+
+	response.status(200).send();
+}
+
+async function getExpeditionById(request, response, next) {
+	const expedition_id = request.params.expedition_id;
+
+	if (isNaN(Number(expedition_id))) {
+		next(new BadRequestError("Invalid expedition_id"));
+		return;
+	}
+
+	const expedition =
+		await expeditionsService.retrieveExpeditionById(expedition_id);
+
+	if (expedition === null) {
+		next(new NotFoundError("Expedition not found"));
+		return;
+	}
+
+	response.status(200).send({ expedition });
+}
+
 const controller = {
 	getExpeditionsByUser,
 	getAllExpeditions,
 	getLeaderboardExpeditions,
+	postExpedition,
+	getExpeditionById,
 };
 
 export default controller;
