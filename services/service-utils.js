@@ -27,17 +27,21 @@ function normaliseTraceCoords(coords, boundingBox, svgWidth, svgHeight) {
 	const height = boundingBox.maxY - boundingBox.minY;
 	const padding = 0.1;
 
-	const xScale = (svgWidth * (1 - padding)) / width;
-	const yScale = (svgHeight * (1 - padding)) / height;
+	const widthMinusPadding = svgWidth * (1 - padding);
+	const heightMinusPadding = svgHeight * (1 - padding);
+
+	const scale = Math.min(
+		widthMinusPadding / width,
+		heightMinusPadding / height,
+	);
+
+	const xOffset = (svgWidth - width * scale) / 2;
+	const yOffset = (svgHeight - height * scale) / 2;
 
 	const normalisedRoute = coords.map((point) => {
 		const normalisedPoint = {
-			x:
-				(point[0] - boundingBox.minX) * xScale +
-				(svgWidth * padding) / 2,
-			y:
-				(point[1] - boundingBox.minY) * yScale +
-				(svgHeight * padding) / 2,
+			x: (point[0] - boundingBox.minX) * scale + xOffset,
+			y: svgHeight - ((point[1] - boundingBox.minY) * scale + yOffset),
 		};
 
 		return normalisedPoint;
@@ -49,8 +53,8 @@ function normaliseTraceCoords(coords, boundingBox, svgWidth, svgHeight) {
 function parseCoords(coords) {
 	let parsedCoords = "";
 	for (let point of coords) {
-		const x = Math.floor(point.x);
-		const y = Math.floor(point.y);
+		const x = point.x.toFixed(4);
+		const y = point.y.toFixed(4);
 		parsedCoords += `${x} ${y}, `;
 	}
 
@@ -62,8 +66,8 @@ function createSvg(coordinates) {
 	const normalisedTrace = normaliseTraceCoords(
 		coordinates,
 		boundingBox,
-		100,
-		100,
+		1,
+		1,
 	);
 	const parsedCoords = parseCoords(normalisedTrace);
 
