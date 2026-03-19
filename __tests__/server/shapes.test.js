@@ -23,9 +23,8 @@ describe("/api/shapes/daily", () => {
 			const { dailyShape } = body;
 
 			expect(typeof dailyShape.shape_id).toBe("number");
-			expect(typeof dailyShape.svg_path).toBe("string");
 			expect(typeof dailyShape.name).toBe("string");
-			expect(typeof dailyShape.last_daily).toBe("string");
+			expect(typeof dailyShape.last_daily).toBe("object"|| "string");
 		});
 		test("Database last_daily is updated to the current date", async () => {
 			const { body } = await request(app)

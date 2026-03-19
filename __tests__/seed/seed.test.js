@@ -22,7 +22,7 @@ describe("shapes table", () => {
 
 			expect(column_name).toBe("shape_id");
 		});
-		test("shape_id is serial", async () => {
+		test("shape_id is int", async () => {
 			const {
 				rows: [column],
 			} = await db.query(
@@ -35,26 +35,6 @@ describe("shapes table", () => {
 
 			expect(column.column_name).toBe("shape_id");
 			expect(column.data_type).toBe("integer");
-			expect(column.column_default).toBe(
-				"nextval('shapes_shape_id_seq'::regclass)",
-			);
-		});
-	});
-	describe("svg_path", () => {
-		test("svg_path is varchar max length 1000", async () => {
-			const {
-				rows: [column],
-			} = await db.query(
-				`SELECT column_name, data_type, character_maximum_length
-                    FROM information_schema.columns
-                    WHERE table_name = 'shapes'
-                    AND column_name = 'svg_path';
-                `,
-			);
-
-			expect(column.column_name).toBe("svg_path");
-			expect(column.data_type).toBe("character varying");
-			expect(column.character_maximum_length).toBe(1000);
 		});
 	});
 	describe("name", () => {
@@ -100,8 +80,8 @@ describe("shapes table", () => {
                 `,
 			);
 
-            expect(column.column_name).toBe("last_daily");
-            expect(column.column_default).toBe(null);
+			expect(column.column_name).toBe("last_daily");
+			expect(column.column_default).toBe(null);
 		});
 	});
 });

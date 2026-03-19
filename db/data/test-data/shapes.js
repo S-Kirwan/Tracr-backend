@@ -1,23 +1,67 @@
 const shapesData = [
 	{
-		name: "bluetooth",
-		svg_path: "public/assets/shapes/bluetooth.svg",
-		last_daily: "2026-03-10",
+		shapeId: 1,
+		name: "triangle",
 	},
 	{
-		name: "banner",
-		svg_path: "public/assets/shapes/banner.svg",
-		last_daily: "2026-03-09",
+		shapeId: 2,
+		name: "cross",
 	},
 	{
-		name: "crosshair",
-		svg_path: "public/assets/shapes/crosshair.svg",
-		last_daily: "2026-03-08",
+		shapeId: 3,
+		name: "zigzag",
 	},
 	{
-		name: "four arrows",
-		svg_path: "public/assets/shapes/four_arrows.svg",
-		last_daily: "2026-03-07",
+		shapeId: 4,
+		name: "hexagon",
+	},
+	{
+		shapeId: 5,
+		name: "arrow",
+	},
+	{
+		shapeId: 6,
+		name: "steps",
+	},
+	{
+		shapeId: 7,
+		name: "spiral",
+	},
+	{
+		shapeId: 8,
+		name: "star",
+	},
+	{
+		shapeId: 9,
+		name: "gem",
+	},
+	{
+		shapeId: 10,
+		name: "heart",
+	},
+	{
+		shapeId: 11,
+		name: "lightning",
+	},
+	{
+		shapeId: 12,
+		name: "butterfly",
+	},
+	{
+		shapeId: 13,
+		name: "bear",
+	},
+	{
+		shapeId: 14,
+		name: "airplane",
+	},
+	{
+		shapeId: 15,
+		name: "house",
+	},
+	{
+		shapeId: 16,
+		name: "sailboat",
 	},
 ];
 
