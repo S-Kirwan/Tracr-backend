@@ -22,7 +22,9 @@ async function fetchExpeditionsByUserIdTimeframe(userId, sortBy, order, time) {
 			, ST_Length(coordinates::geography) AS distance
 			, ST_AsGeoJSON(coordinates) AS geomJSON
 			FROM expeditions
-			WHERE timestamp >= NOW() - INTERVAL '${time}' AND user_id = $1
+			WHERE timestamp >= NOW() - INTERVAL '${time}'
+				AND timestamp <= NOW()
+				AND user_id = $1
 			ORDER BY ${sortBy} ${order}
 		`,
 		[userId],
@@ -53,6 +55,7 @@ async function fetchLeaderboard(sortBy, order, time) {
 			FROM expeditions
 			LEFT JOIN users ON expeditions.user_id = users.user_id
 			WHERE timestamp >= NOW() - INTERVAL '${time}'
+				AND timestamp <= NOW()
 			ORDER BY ${sortBy} ${order}
         `,
 	);
