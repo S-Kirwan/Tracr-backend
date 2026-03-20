@@ -37,7 +37,7 @@ Using GPS tracking, the app records the user’s path and compares it to the cho
 
 ### Image & Shape Processing
 
-* Libraries such as **Jimp** and **PixelMatch** for comparing shapes and routes
+* Grid matching algorithms 
 
 ---
 
