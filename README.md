@@ -55,7 +55,7 @@ Using GPS tracking, the app records the user’s path and compares it to the cho
 
 **Tracr Backend** is a RESTful API that powers the Tracr application, a platform for tracking user expeditions and transforming real-world movement into structured geospatial data and competitive challenges.
 
-Built with **Node.js**, **Express**, and **PostgreSQL (PostGIS)**, this backend handles everything from user authentication to spatial route tracking and leaderboards.
+Built with **Node.js**, **Express**, and **PostgreSQL + PostGIS**, this backend handles everything from user authentication to spatial route tracking and leaderboards.
 
 ---
 
@@ -79,7 +79,7 @@ Built with **Node.js**, **Express**, and **PostgreSQL (PostGIS)**, this backend 
 ### 1. Clone the Repository
 
 ```bash
-git clone <tracr-repo-url>
+git clone https://github.com/S-Kirwan/Tracr-backend.git
 cd tracr-backend
 ```
 
